@@ -1,0 +1,1646 @@
+import turtle
+import time
+import random
+from spellchecker import SpellChecker
+
+def game():
+    global selectList
+    global row
+    global valid
+    global square
+    global correctL
+    global word2
+    global word
+    global otherWords
+    global correct
+    global incorrect
+    global done
+    
+    word_list = ['ABOUT', 'ABOVE', 'ABUSE', 'ACTOR', 'ACUTE', 'ADMIT', 'ADOPT', 'ADULT', 'AFTER', 'AGAIN', 'AGENT', 'AGREE', 'AHEAD', 'ALARM', 'ALBUM', 'ALERT', 'ALIKE', 'ALIVE', 'ALLOW', 'ALONE', 'ALONG', 'ALTER', 'AMONG', 'ANGER', 'ANGLE', 'ANGRY', 'APART', 'APPLE', 'APPLY', 'ARENA', 'ARGUE', 'ARISE', 'ARRAY', 'ASIDE', 'ASSET', 'AUDIO', 'AUDIT', 'AVOID', 'AWARD', 'AWARE', 'BADLY', 'BAKER', 'BASES', 'BASIC', 'BASIS', 'BEACH', 'BEGAN', 'BEGIN', 'BEGUN', 'BEING', 'BELOW', 'BENCH', 'BILLY', 'BIRTH', 'BLACK', 'BLAME', 'BLIND', 'BLOCK', 'BLOOD', 'BOARD', 'BOOST', 'BOOTH', 'BOUND', 'BRAIN', 'BRAND', 'BREAD', 'BREAK', 'BREED', 'BRIEF', 'BRING', 'BROAD', 'BROKE', 'BROWN', 'BUILD', 'BUILT', 'BUYER', 'CABLE', 'CALIF', 'CARRY', 'CATCH', 'CAUSE', 'CHAIN', 'CHAIR', 'CHART', 'CHASE', 'CHEAP', 'CHECK', 'CHEST', 'CHIEF', 'CHILD', 'CHINA', 'CHOSE', 'CIVIL', 'CLAIM', 'CLASS', 'CLEAN', 'CLEAR', 'CLICK', 'CLOCK', 'CLOSE', 'COACH', 'COAST', 'COULD', 'COUNT', 'COURT', 'COVER', 'CRAFT', 'CRASH', 'CREAM', 'CRIME', 'CROSS', 'CROWD', 'CROWN', 'CURVE', 'CYCLE', 'DAILY', 'DANCE', 'DATED', 'DEALT', 'DEATH', 'DEBUT', 'DELAY', 'DEPTH', 'DOING', 'DOUBT', 'DOZEN', 'DRAFT', 'DRAMA', 'DRAWN', 'DREAM', 'DRESS', 'DRILL', 'DRINK', 'DRIVE', 'DROVE', 'DYING', 'EAGER', 'EARLY', 'EARTH', 'EIGHT', 'ELITE', 'EMPTY', 'ENEMY', 'ENJOY', 'ENTER', 'ENTRY', 'EQUAL', 'ERROR', 'EVENT', 'EVERY', 'EXACT', 'EXIST', 'EXTRA', 'FAITH', 'FALSE', 'FAULT', 'FIBER', 'FIELD', 'FIFTH', 'FIFTY', 'FIGHT', 'FINAL', 'FIRST', 'FIXED', 'FLASH', 'FLEET', 'FLOOR', 'FLUID', 'FOCUS', 'FORCE', 'FORTH', 'FORTY', 'FORUM', 'FOUND', 'FRAME', 'FRANK', 'FRAUD', 'FRESH', 'FRONT', 'FRUIT', 'FULLY', 'FUNNY', 'GIANT', 'GIVEN', 'GLASS', 'GLOBE', 'GOING', 'GRACE', 'GRADE', 'GRAND', 'GRANT', 'GRASS', 'GREAT', 'GREEN', 'GROSS', 'GROUP', 'GROWN', 'GUARD', 'GUESS', 'GUEST', 'GUIDE', 'HAPPY', 'HARRY', 'HEART', 'HEAVY', 'HENCE', 'HENRY', 'HORSE', 'HOTEL', 'HOUSE', 'HUMAN', 'IDEAL', 'IMAGE', 'INDEX', 'INNER', 'INPUT', 'ISSUE', 'JAPAN', 'JIMMY', 'JOINT', 'JONES', 'JUDGE', 'KNOWN', 'LABEL', 'LARGE', 'LASER', 'LATER', 'LAUGH', 'LAYER', 'LEARN', 'LEASE', 'LEAST', 'LEAVE', 'LEGAL', 'LEVEL', 'LEWIS', 'LIGHT', 'LIMIT', 'LINKS', 'LIVES', 'LOCAL', 'LOGIC', 'LOOSE', 'LOWER', 'LUCKY', 'LUNCH', 'LYING', 'MAGIC', 'MAJOR', 'MAKER', 'MARCH', 'MARIA', 'MATCH', 'MAYBE', 'MAYOR', 'MEANT', 'MEDIA', 'METAL', 'MIGHT', 'MINOR', 'MINUS', 'MIXED', 'MODEL', 'MONEY', 'MONTH', 'MORAL', 'MOTOR', 'MOUNT', 'MOUSE', 'MOUTH', 'MOVIE', 'MUSIC', 'NEEDS', 'NEVER', 'NEWLY', 'NIGHT', 'NOISE', 'NORTH', 'NOTED', 'NOVEL', 'NURSE', 'OCCUR', 'OCEAN', 'OFFER', 'OFTEN', 'ORDER', 'OTHER', 'OUGHT', 'PAINT', 'PANEL', 'PAPER', 'PARTY', 'PEACE', 'PETER', 'PHASE', 'PHONE', 'PHOTO', 'PIECE', 'PILOT', 'PITCH', 'PLACE', 'PLAIN', 'PLANE', 'PLANT', 'PLATE', 'POINT', 'POUND', 'POWER', 'PRESS', 'PRICE', 'PRIDE', 'PRIME', 'PRINT', 'PRIOR', 'PRIZE', 'PROOF', 'PROUD', 'PROVE', 'QUEEN', 'QUICK', 'QUIET', 'QUITE', 'RADIO', 'RAISE', 'RANGE', 'RAPID', 'RATIO', 'REACH', 'READY', 'REFER', 'RIGHT', 'RIVAL', 'RIVER', 'ROBIN', 'ROGER', 'ROMAN', 'ROUGH', 'ROUND', 'ROUTE', 'ROYAL', 'RURAL', 'SCALE', 'SCENE', 'SCOPE', 'SCORE', 'SENSE', 'SERVE', 'SEVEN', 'SHALL', 'SHAPE', 'SHARE', 'SHARP', 'SHEET', 'SHELF', 'SHELL', 'SHIFT', 'SHIRT', 'SHOCK', 'SHOOT', 'SHORT', 'SHOWN', 'SIGHT', 'SINCE', 'SIXTH', 'SIXTY', 'SIZED', 'SKILL', 'SLEEP', 'SLIDE', 'SMALL', 'SMART', 'SMILE', 'SMITH', 'SMOKE', 'SOLID', 'SOLVE', 'SORRY', 'SOUND', 'SOUTH', 'SPACE', 'SPARE', 'SPEAK', 'SPEED', 'SPEND', 'SPENT', 'SPLIT', 'SPOKE', 'SPORT', 'STAFF', 'STAGE', 'STAKE', 'STAND', 'START', 'STATE', 'STEAM', 'STEEL', 'STICK', 'STILL', 'STOCK', 'STONE', 'STOOD', 'STORE', 'STORM', 'STORY', 'STRIP', 'STUCK', 'STUDY', 'STUFF', 'STYLE', 'SUGAR', 'SUITE', 'SUPER', 'SWEET', 'TABLE', 'TAKEN', 'TASTE', 'TAXES', 'TEACH', 'TEETH', 'TERRY', 'TEXAS', 'THANK', 'THEFT', 'THEIR', 'THEME', 'THERE', 'THESE', 'THICK', 'THING', 'THINK', 'THIRD', 'THOSE', 'THREE', 'THREW', 'THROW', 'TIGHT', 'TIMES', 'TIRED', 'TITLE', 'TODAY', 'TOPIC', 'TOTAL', 'TOUCH', 'TOUGH', 'TOWER', 'TRACK', 'TRADE', 'TRAIN', 'TREAT', 'TREND', 'TRIAL', 'TRIED', 'TRIES', 'TRUCK', 'TRULY', 'TRUST', 'TRUTH', 'TWICE', 'UNDER', 'UNDUE', 'UNION', 'UNITY', 'UNTIL', 'UPPER', 'UPSET', 'URBAN', 'USAGE', 'USUAL', 'VALID', 'VALUE', 'VIDEO', 'VIRUS', 'VISIT', 'VITAL', 'VOICE', 'WASTE', 'WATCH', 'WATER', 'WHEEL', 'WHERE', 'WHICH', 'WHILE', 'WHITE', 'WHOLE', 'WHOSE', 'WOMAN', 'WOMEN', 'WORLD', 'WORRY', 'WORSE', 'WORST', 'WORTH', 'WOULD', 'WOUND', 'WRITE', 'WRONG', 'WROTE', 'YIELD', 'YOUNG', 'YOUTH']
+    word = word_list[random.randint(0, len(word_list))]
+    word = list(word)
+    dialogue1 = ["not a real word bro", "not a real word","what even is that word","are you even trying","what dictionary did you pull that out of","do you really think that's a word","wow i love this (totally real) word"]
+    faces = [":|",'.-.',"._.","-_-","D:",":O",":C",":[",":{",".~.","'~'","`_`","`-`","`~`"]
+    dialogue2= ["not 5 letters bro","not 5 letters","can you count","count to five for me","this game is about *5* letter words","one, two, three, four, FIVE"]
+    spell = SpellChecker()
+    valid = False
+    def check(word):
+        global otherWords
+        global valid
+        valid = False
+        if word == spell.correction(word) or word in otherWords:
+            valid = True
+        else:
+            valid = False
+    otherWords = ["SOARE","ROATE","ODIUM","ENOKI","WAQFS","VOZHD"]
+
+
+    v = turtle.Turtle()
+    v.speed("fastest")
+    v.hideturtle()
+    t = turtle.Turtle()
+    t.hideturtle()
+    a = turtle.Turtle()
+    l = turtle.Turtle()
+    l.speed("fastest")
+    l.hideturtle()
+    l.penup()
+    l.goto(0,0)
+    l.pendown()
+    a.hideturtle()
+    c= turtle.Turtle()
+    t.speed("fastest")
+    c.speed("fastest")
+    c.hideturtle()
+    t.pensize(5)
+    s = turtle.Screen()
+    s.clear()
+    s.tracer(0, 0)
+    s.bgpic("Screenshot 2023-12-07 092050.png")
+
+    word2 = []
+    correct = []
+    incorrect = []
+
+
+    done = False
+    selectList = []
+    correctL = 0
+    def Lettering(x,y):
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        global correct
+        global incorrect
+        global correctL
+        remove = False
+        letter = 0
+
+
+        selected = ""
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                if y >= 100 and  y <= 180:
+                    if x >= 0 and x <= 590:
+                        while x >= 0:
+                            letter = letter+1
+                            x = x-60
+                        selected = firstRow[letter-1]
+                        selectList.append(selected)
+                if y >= 10 and  y <= 90:
+                    if x >= 30 and x <= 560:
+                        while x >= 30:
+                            letter = letter+1
+                            x = x-60
+                        selected = secondRow[letter-1]
+                        selectList.append(selected)
+                if y >= -80 and  y <= 0:
+                    if x >= 90 and x <= 500:
+                        while x >= 90:
+                            letter = letter+1
+                            x = x-60
+                        selected = thirdRow[letter-1]
+                        selectList.append(selected)
+                    elif x >= 510 and x <= 600:
+                        if len(selectList) > 0:
+                            selectList.pop(-1)
+
+                    elif x >= -10  and x <= 80:
+                        v.clear()
+                        if len(selectList) == 5:
+                            check("".join(selectList))
+                            if valid == True:
+                                if row <= 6:
+                                    square = 1
+                                    i=0
+                                    for i in range(len(selectList)):
+                                        if selectList[i] == word[i]:
+                                            word2.append(selectList[i])
+
+                                    i = 0
+                                    for i in range(len(selectList)):
+                                        t.penup()
+                                        t.setheading(0)
+                                        t.goto(-600+ ((square-1)*90),150 - ((row-1)*90))
+                                        if selectList[i] == word[i]:
+                                            squareSequence(80,80,"",True, "green")
+                                            correctL = correctL + 1
+                                            if selectList[i] not in correct:
+                                                correct.append(selectList[i])
+                                                if selectList[i] in firstRow:
+                                                    t.setheading(0)
+                                                    move(0 + (60 * firstRow.index(selectList[i])),100)
+                                                    squareSequence(50, 80,selectList[i], True, "green")
+                                                    t.pencolor("white")
+                                                    t.penup()
+                                                    t.backward(35)
+                                                    t.left(90)
+                                                    t.forward(20)
+                                                    t.right(90)
+                                                    t.penup()
+                                                    t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                    t.pencolor("black")
+                                                if selectList[i] in secondRow:
+                                                    t.setheading(0)
+                                                    move(30 + (60 * secondRow.index(selectList[i])),10)
+                                                    squareSequence(50, 80,selectList[i], True, "green")
+                                                    t.pencolor("white")
+                                                    t.penup()
+                                                    t.backward(35)
+                                                    t.left(90)
+                                                    t.forward(20)
+                                                    t.right(90)
+                                                    t.penup()
+                                                    t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                    t.pencolor("black")
+                                                if selectList[i] in thirdRow:
+                                                    t.setheading(0)
+                                                    move(90 + (60 * thirdRow.index(selectList[i])),-80)
+                                                    squareSequence(50, 80,selectList[i], True, "green")
+                                                    t.pencolor("white")
+                                                    t.penup()
+                                                    t.backward(35)
+                                                    t.left(90)
+                                                    t.forward(20)
+                                                    t.right(90)
+                                                    t.penup()
+                                                    t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                    t.pencolor("black")
+                                        elif selectList[i] in word:
+                                            if word2.count(selectList[i]) < word.count(selectList[i]):
+                                                squareSequence(80,80,"",True, "yellow")
+                                                word2.append(selectList[i])
+                                            else:
+                                                squareSequence(80,80,"",True, "gray")
+                                            if selectList[i] not in correct:
+                                                if selectList[i] not in incorrect:
+                                                    incorrect.append(selectList[i])
+                                                    if selectList[i] in firstRow:
+                                                        t.setheading(0)
+                                                        move(0 + (60 * firstRow.index(selectList[i])),100)
+                                                        squareSequence(50, 80,selectList[i], True, "yellow")
+                                                        t.pencolor("white")
+                                                        t.penup()
+                                                        t.backward(35)
+                                                        t.left(90)
+                                                        t.forward(20)
+                                                        t.right(90)
+                                                        t.penup()
+                                                        t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                        t.pencolor("black")
+                                                    if selectList[i] in secondRow:
+                                                        t.setheading(0)
+                                                        move(30 + (60 * secondRow.index(selectList[i])),10)
+                                                        squareSequence(50, 80,selectList[i], True, "yellow")
+                                                        t.pencolor("white")
+                                                        t.penup()
+                                                        t.backward(35)
+                                                        t.left(90)
+                                                        t.forward(20)
+                                                        t.right(90)
+                                                        t.penup()
+                                                        t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                        t.pencolor("black")
+                                                    if selectList[i] in thirdRow:
+                                                        t.setheading(0)
+                                                        move(90 + (60 * thirdRow.index(selectList[i])),-80)
+                                                        squareSequence(50, 80,selectList[i], True, "yellow")
+                                                        t.pencolor("white")
+                                                        t.penup()
+                                                        t.backward(35)
+                                                        t.left(90)
+                                                        t.forward(20)
+                                                        t.right(90)
+                                                        t.penup()
+                                                        t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                        t.pencolor("black")
+                                        else:
+                                            squareSequence(80,80,"",True, "gray")
+                                            if selectList[i] not in correct:
+                                                if selectList[i] not in incorrect:
+                                                    if selectList[i] in firstRow:
+                                                        t.setheading(0)
+                                                        move(0 + (60 * firstRow.index(selectList[i])),100)
+                                                        squareSequence(50, 80,selectList[i], True, "gray")
+                                                        t.pencolor("white")
+                                                        t.penup()
+                                                        t.backward(35)
+                                                        t.left(90)
+                                                        t.forward(20)
+                                                        t.right(90)
+                                                        t.penup()
+                                                        t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                        t.pencolor("black")
+                                                    if selectList[i] in secondRow:
+                                                        t.setheading(0)
+                                                        move(30 + (60 * secondRow.index(selectList[i])),10)
+                                                        squareSequence(50, 80,selectList[i], True, "gray")
+                                                        t.pencolor("white")
+                                                        t.penup()
+                                                        t.backward(35)
+                                                        t.left(90)
+                                                        t.forward(20)
+                                                        t.right(90)
+                                                        t.penup()
+                                                        t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                        t.pencolor("black")
+                                                    if selectList[i] in thirdRow:
+                                                        t.setheading(0)
+                                                        move(90 + (60 * thirdRow.index(selectList[i])),-80)
+                                                        squareSequence(50, 80,selectList[i], True, "gray")
+                                                        t.pencolor("white")
+                                                        t.penup()
+                                                        t.backward(35)
+                                                        t.left(90)
+                                                        t.forward(20)
+                                                        t.right(90)
+                                                        t.penup()
+                                                        t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                        t.pencolor("black")
+                                
+
+                                        t.pendown()
+                                        t.penup()
+                                        t.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                                        t.pendown()
+                                        t.pencolor("white")
+                                        t.write(selectList[i], align="center",font=("Clear Sans",50, "bold"))
+                                        t.pencolor("black")
+                                        
+                                        square = square + 1
+
+
+                                    word2 = []
+                                    selectList.clear()
+                                    row = row +1
+                                    
+
+                                    if correctL == 5:
+                                        v.penup()
+                                        v.goto(0,0)
+                                        v.pendown()
+                                        l.color("white")
+                                        l.dot(10000)
+                                        l.color("black")
+                                        aword = "".join(word)
+                                        v.write('you win C: word: {} \n Press "TAB" to restart or click anywhere'.format(aword),align='center',font=('Clear Sans',30,"bold"))
+                                        s.onclick(clickrestart)
+                                        row = 7
+                                    else:
+                                        if row == 7:
+                                            v.penup()
+                                            v.goto(0,0)
+                                            v.pendown()
+                                            l.color("white")
+                                            l.dot(10000)
+                                            l.color("black")
+                                            aword = "".join(word)
+                                            v.write('you lose D: word: {} \n Press "TAB" to restart or click anywhere'.format(aword),align='center',font=('Clear Sans',30,"bold"))
+                                            s.onclick(clickrestart)
+                                    correctL = 0
+                            else:
+                                v.penup()
+                                v.goto(250,-200)
+                                v.write("{} {}".format(dialogue1[random.randint(0,len(dialogue1)-1)],faces[random.randint(0,len(faces)-1)]),align= 'center',font = ('Clear Sans',30,'bold'))
+                        else:
+                            v.penup()
+                            v.goto(250,-200)
+
+                            v.write("{} {}".format(dialogue2[random.randint(0,len(dialogue2)-1)],faces[random.randint(0,len(faces)-1)]),align='center',font = ('Clear Sans',30,'bold'))
+                                        
+                        
+
+                            
+                if len(selectList) > 5:
+                    selectList.pop(-1)
+                a.clear()
+                square = 1
+                i = 0
+                for i in selectList:
+                    a.penup()
+                    a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                    a.pendown()
+                    a.pencolor("gray")
+                    a.pensize(5)
+                    for d in range(4):
+                        a.forward(80)
+                        a.left(90)
+                    a.pencolor("black")
+                    a.penup()
+                    a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                    a.pendown()
+                    a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                    square = square + 1
+
+
+
+
+                
+
+
+                
+            
+    def move(x,y):
+        t.penup()
+        t.goto(x,y)
+        t.pendown()
+    def squareSequence(x,y, string, fill, color):
+        t.pencolor("black")
+        if fill == True:
+            t.fillcolor(color)
+            t.begin_fill()
+        for i in range(2):
+            t.pencolor("light gray")
+            if fill == True:
+                t.pencolor("light gray")
+            t.forward(x)
+            t.left(90)
+            t.forward(y)
+            t.left(90)
+        if fill == True:
+            t.end_fill()
+            t.pencolor("black")
+        t.penup()
+        t.forward(25)
+        t.left(90)
+        t.forward(20)
+        t.pendown()
+        t.write(string, align="center", font=("Clear Sans", 25, "bold"))
+        t.penup()
+        t.backward(20)
+        t.right(90)
+        t.backward(25)
+        t.forward(60)
+        t.pendown()
+
+    done = False
+    move(-600, -300)
+    t.pencolor("light gray")
+    squareSequence(80,80, "", False,"white")
+    move(-600, -300)
+    for i in range(6):
+        for i in range(5):
+            squareSequence(80,80, "", False,"white")
+            t.penup()
+            t.forward(30)
+            t.pendown()
+        t.penup()
+        t.backward(450)
+        t.pendown()
+        t.left(90)
+        t.penup()
+        t.forward(90)
+        t.right(90)
+        t.pendown()
+    t.pencolor("black")
+
+    row = 1
+    square = 1
+    def cursor(row, square):
+        c.penup()
+        c.goto(-600 + ((square-1)*90) + 20,230 - ((row-1)*90) -60)
+        c.pendown()
+    cursor(row,square)
+    c.left(90)
+    c.pensize(5)
+    c.pendown()
+    move(0, 100)
+    # t.right(90)
+    firstRow = ["Q","W","E","R","T","Y","U","I","O","P"]
+    for i in range(10):
+        squareSequence(50,80,firstRow[i], True,"light gray")
+    secondRow = ["A","S","D","F","G","H","J","K","L"]
+    move(30, 10)
+    for i in range(9):
+        squareSequence(50,80,secondRow[i], True,"light gray")
+    thirdRow = ["Z","X","C","V","B","N","M"]
+    move(90, -80)
+    for i in range(7):
+        squareSequence(50,80,thirdRow[i], True,"light gray")
+
+    move(-10, -80)
+    squareSequence(90, 80,"", True,"light gray")
+    move(35, -55)
+    t.write("ENTER", align="center",font=("Clear Sans", 15, "bold"))
+
+
+            
+    move(510, -80)
+    squareSequence(90, 80,"", True,"light gray")
+    move(550, -50)
+    t.pensize(3)
+    t.forward(20)
+    t.left(90)
+    t.forward(20)
+    t.left(90)
+    t.forward(20)
+    t.left(45)
+    t.forward(14)
+    t.left(90)
+    t.forward(14)
+    move(555, -45)
+    t.left(90)
+    t.forward(13)
+    move(565, -45)
+    t.left(90)
+    t.forward(14)
+    l.clear()
+    move(-400, 250)
+    t.write("", align="center", font=("Clear Sans", 40, "bold"))
+    s.update()
+    c.pencolor("black")
+
+    def aP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("A")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(aP,"a")
+    def bP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("B")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(bP,"b")
+    def cP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("C")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(cP,"c")
+    def dP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("D")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(dP,"d")
+    def backP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                if len(selectList) > 0:
+                    selectList.pop(-1)
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(backP, "BackSpace")
+    def enterP():
+        v.clear()
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global correctL
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                if len(selectList) == 5:
+                    check("".join(selectList))
+                    if valid == True:
+                        if row <= 6:
+                            square = 1
+                            i=0
+                            for i in range(len(selectList)):
+                                if selectList[i] == word[i]:
+                                    word2.append(selectList[i])
+                                    if selectList[i] not in correct:
+                                        correct.append(selectList[i])
+                                        if selectList[i] in firstRow:
+                                            t.setheading(0)
+                                            move(0 + (60 * firstRow.index(selectList[i])),100)
+                                            squareSequence(50, 80,selectList[i], True, "green")
+                                            t.pencolor("white")
+                                            t.penup()
+                                            t.backward(35)
+                                            t.left(90)
+                                            t.forward(20)
+                                            t.right(90)
+                                            t.penup()
+                                            t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                            t.pencolor("black")
+                                        if selectList[i] in secondRow:
+                                            t.setheading(0)
+                                            move(30 + (60 * secondRow.index(selectList[i])),10)
+                                            squareSequence(50, 80,selectList[i], True, "green")
+                                            t.pencolor("white")
+                                            t.penup()
+                                            t.backward(35)
+                                            t.left(90)
+                                            t.forward(20)
+                                            t.right(90)
+                                            t.penup()
+                                            t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                            t.pencolor("black")
+                                        if selectList[i] in thirdRow:
+                                            t.setheading(0)
+                                            move(90 + (60 * thirdRow.index(selectList[i])),-80)
+                                            squareSequence(50, 80,selectList[i], True, "green")
+                                            t.pencolor("white")
+                                            t.penup()
+                                            t.backward(35)
+                                            t.left(90)
+                                            t.forward(20)
+                                            t.right(90)
+                                            t.penup()
+                                            t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                            t.pencolor("black")
+
+                            i = 0
+
+                            for i in range(len(selectList)):
+                                t.penup()
+                                t.setheading(0)
+                                t.goto(-600+ ((square-1)*90),150 - ((row-1)*90))
+
+
+                                if selectList[i] == word[i]:
+                                    
+                                    squareSequence(80,80,"",True, "green")
+                                    correctL = correctL + 1
+
+
+                                elif selectList[i] in word:
+                                    if word2.count(selectList[i]) < word.count(selectList[i]):
+                                        squareSequence(80,80,"",True, "yellow")
+                                        word2.append(selectList[i])
+                                    else:
+                                        squareSequence(80,80,"",True, "gray")
+                                    if selectList[i] not in correct:
+                                        if selectList[i] not in incorrect:
+                                            incorrect.append(selectList[i])
+                                            if selectList[i] in firstRow:
+                                                t.setheading(0)
+                                                move(0 + (60 * firstRow.index(selectList[i])),100)
+                                                squareSequence(50, 80,selectList[i], True, "yellow")
+                                                t.pencolor("white")
+                                                t.penup()
+                                                t.backward(35)
+                                                t.left(90)
+                                                t.forward(20)
+                                                t.right(90)
+                                                t.penup()
+                                                t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                t.pencolor("black")
+                                            if selectList[i] in secondRow:
+                                                t.setheading(0)
+                                                move(30 + (60 * secondRow.index(selectList[i])),10)
+                                                squareSequence(50, 80,selectList[i], True, "yellow")
+                                                t.pencolor("white")
+                                                t.penup()
+                                                t.backward(35)
+                                                t.left(90)
+                                                t.forward(20)
+                                                t.right(90)
+                                                t.penup()
+                                                t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                t.pencolor("black")
+                                            if selectList[i] in thirdRow:
+                                                t.setheading(0)
+                                                move(90 + (60 * thirdRow.index(selectList[i])),-80)
+                                                squareSequence(50, 80,selectList[i], True, "yellow")
+                                                t.pencolor("white")
+                                                t.penup()
+                                                t.backward(35)
+                                                t.left(90)
+                                                t.forward(20)
+                                                t.right(90)
+                                                t.penup()
+                                                t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                t.pencolor("black")
+                                else:
+                                    squareSequence(80,80,"",True, "gray")
+                                    if selectList[i] not in correct:
+                                        if selectList[i] not in incorrect:
+                                            if selectList[i] in firstRow:
+                                                t.setheading(0)
+                                                move(0 + (60 * firstRow.index(selectList[i])),100)
+                                                squareSequence(50, 80,selectList[i], True, "gray")
+                                                t.pencolor("white")
+                                                t.penup()
+                                                t.backward(35)
+                                                t.left(90)
+                                                t.forward(20)
+                                                t.right(90)
+                                                t.penup()
+                                                t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                t.pencolor("black")
+                                            if selectList[i] in secondRow:
+                                                t.setheading(0)
+                                                move(30 + (60 * secondRow.index(selectList[i])),10)
+                                                squareSequence(50, 80,selectList[i], True, "gray")
+                                                t.pencolor("white")
+                                                t.penup()
+                                                t.backward(35)
+                                                t.left(90)
+                                                t.forward(20)
+                                                t.right(90)
+                                                t.penup()
+                                                t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                t.pencolor("black")
+                                            if selectList[i] in thirdRow:
+                                                t.setheading(0)
+                                                move(90 + (60 * thirdRow.index(selectList[i])),-80)
+                                                squareSequence(50, 80,selectList[i], True, "gray")
+                                                t.pencolor("white")
+                                                t.penup()
+                                                t.backward(35)
+                                                t.left(90)
+                                                t.forward(20)
+                                                t.right(90)
+                                                t.penup()
+                                                t.write(selectList[i],align="center",font=("Clear Sans",25,"bold"))
+                                                t.pencolor("black")
+                                t.pendown()
+                                t.penup()
+                                t.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                                t.pendown()
+                                t.pencolor("white")
+                                t.write(selectList[i], align="center",font=("Clear Sans",50, "bold"))
+                                t.pencolor("black")
+            
+                                square = square + 1
+                            word2 = []
+                            selectList.clear()
+                            row = row +1
+                            if correctL == 5:
+                                v.penup()
+                                v.goto(0,0)
+                                v.pendown()
+                                
+                                l.color("white")
+                                l.dot(10000)
+                                l.color("black")
+                                aword = "".join(word)
+                                v.write('you win C: word: {} \n Press "TAB" to restart or click anywhere'.format(aword),align='center',font=('Clear Sans',30,"bold"))
+                                s.onclick(clickrestart)
+                                row = 7
+                            else:
+                                if row == 7:
+                                    v.penup()
+                                    v.goto(0,0)
+                                    v.pendown()
+                                    l.color("white")
+                                    l.dot(10000)
+                                    l.color("black")
+                                    aword = "".join(word)
+                                    v.write('you lose D: word: {} \n Press "TAB" to restart or click anywhere'.format(aword),align='center',font=('Clear Sans',30,"bold"))
+                                    s.onclick(clickrestart)
+                            correctL = 0
+                    else:
+                        v.penup()
+                        v.goto(250,-200)
+                        v.write("{} {}".format(dialogue1[random.randint(0,len(dialogue1)-1)],faces[random.randint(0,len(faces)-1)]),align= 'center',font = ('Clear Sans',30,'bold'))
+                else:
+                    v.penup()
+                    v.goto(250,-200)
+
+                    v.write("{} {}".format(dialogue2[random.randint(0,len(dialogue2)-1)],faces[random.randint(0,len(faces)-1)]),align='center',font = ('Clear Sans',30,'bold'))
+                if len(selectList) > 5:
+                    selectList.pop(-1)
+                a.clear()
+                square = 1
+                i = 0
+                for i in selectList:
+                    a.penup()
+                    a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                    a.pendown()
+                    a.pencolor("gray")
+                    a.pensize(5)
+                    for d in range(4):
+                        a.forward(80)
+                        a.left(90)
+                    a.penup()
+                    a.pencolor("black")
+                    a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                    a.pendown()
+                    a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                    square = square + 1
+    s.onkeypress(enterP, "Return")
+    def eP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("E")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(eP,"e")
+    def fP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("F")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(fP,"f")
+    def gP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("G")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(gP,"g")
+    def hP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("H")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(hP,"h")
+    def iP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("I")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(iP,"i")
+    def jP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("J")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(jP,"j")
+    def kP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("K")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(kP,"k")
+    def lP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("L")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(lP,"l")
+    def mP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("M")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(mP,"m")
+    def nP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("N")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(nP,"n")
+    def oP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("O")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(oP,"o")
+    def pP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("P")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(pP,"p")
+    def qP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("Q")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(qP,"q")
+    def rP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("R")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(rP,"r")
+    def sP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("S")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(sP,"s")
+    def tP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("T")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(tP,"t")
+    def zP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("Z")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(zP,"z")
+    def uP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("U")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(uP,"u")
+    def vP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("V")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(vP,"v")
+    def wP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("W")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(wP,"w")
+    def xP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("X")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(xP,"x")
+    def yP():
+        global selected
+        global row
+        global square
+        global done
+        global remove
+        global selectList
+        global word2
+        remove = False
+        letter = 0
+        if len(selectList) <= (5 * row):
+            if row <= 6:
+                letter = letter + 1
+                selectList.append("Y")
+            if len(selectList) > 5:
+                selectList.pop(-1)
+            a.clear()
+            square = 1
+            i = 0
+            for i in selectList:
+                a.penup()
+                a.goto(-600 +((square - 1)*90), 150 - ((row-1)*90))
+                a.pendown()
+                a.pencolor("gray")
+                a.pensize(5)
+                for d in range(4):
+                    a.forward(80)
+                    a.left(90)
+                a.penup()
+                a.pencolor("black")
+                a.goto(-580+ ((square-1)*90) + 20,205 - ((row-1)*90) -60)
+                a.pendown()
+                a.write(i, align="center",font=("Clear Sans",50, "bold"))
+                square = square + 1
+    s.onkeypress(yP,"y")
+    def restart():
+        game()
+    def clickrestart(x,y):
+        game()
+    s.onkeypress(restart, "Tab")
+    s.listen()
+    s.onclick(Lettering)
+    s.mainloop()
+game()
