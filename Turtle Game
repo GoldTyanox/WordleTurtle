@@ -1,6 +1,7 @@
 import turtle
-import time
 import random
+import subprocess
+subprocess.run(["pip","install","pyspellchecker"])
 from spellchecker import SpellChecker
 
 def game():
@@ -58,6 +59,8 @@ def game():
     s.tracer(0, 0)
     s.bgpic("Screenshot 2023-12-07 092050.png")
 
+    s.setup(width=1.0, height=1.0, startx=None, starty=None)
+    s.title("Wordle")
     word2 = []
     correct = []
     incorrect = []
